@@ -1,0 +1,33 @@
+---
+output: 
+  MyFirstTemplate::myfirsttemplate:
+    fig_caption: true
+    citation_package: natbib
+bibliography: master.bib
+biblio-style: apsr
+title: "STAT xxx Assignment y"
+author:
+- name: Gradon Nicholls
+  affiliation: PhD Student, University of Waterloo
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+geometry: margin=1in
+fontfamily: mathpazo
+fontsize: 11pt
+# spacing: double
+endnote: no
+# abstract: "This document is about..."
+# keywords: "pandoc, r markdown, knitr"
+#thanks: "Note: I have taken materials here from a combination of my own STAT 901 notes, notes I receieved from Yi Shen when I missed a class, and the Rosenthal book  on probability theory \\citep{rosenthalprob}."
+# header-includes:
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache=TRUE,
+                      message=FALSE, warning=FALSE,
+                      fig.path='figs/',
+                      cache.path = '_cache/',
+                      fig.process = function(x) {
+                      x2 = sub('-\\d+([.][a-z]+)$', '\\1', x)
+                      if (file.rename(x, x2)) x2 else x
+                      })
+```
