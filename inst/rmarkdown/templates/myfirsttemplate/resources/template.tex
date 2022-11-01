@@ -213,8 +213,9 @@ $endif$
 \usepackage{bm} % bold math characters
 \usepackage{centernot} % add "not" slash to any symbol e.g. \centernot\implies
 \usepackage{enumitem}
+\usepackage{mathtools}
 
-% shortcuts for frequently used math symbols
+% fancy/different versions of letters
 \newcommand{\PR}{\textbf{P}} % probability
 \newcommand{\F}{\mathcal{F}} % fancy F
 \newcommand{\G}{\mathcal{G}} % fancy G
@@ -222,9 +223,14 @@ $endif$
 \newcommand{\B}{\mathcal{B}} % fancy B
 \newcommand{\M}{\mathcal{M}} % fancy M
 \newcommand{\A}{\mathcal{A}} % fancy A
+\renewcommand{\L}{\mathcal{L}} % fancy L
 \newcommand{\R}{\mathbb{R}} % real numbers
 \newcommand{\Z}{\mathbb{Z}} % integers
 \newcommand{\N}{\mathbb{N}} % natural numbers
+\renewcommand{\epsilon}{\varepsilon} % fancy epsilon
+\newcommand{\eps}{\epsilon} % alias for epsilon
+
+% shortcuts for operators/symbols/relations/etc.
 \newcommand{\notimply}{\centernot\implies} % does not imply
 \newcommand{\notimplies}{\notimply} % does not imply
 \newcommand{\noteq}{\neq} % alias for neq
@@ -232,8 +238,13 @@ $endif$
 \renewcommand{\forall}{\,\,\,\bforall} % forall in middle of expression
 \newcommand{\sigfield}{\sigma\text{-field}} % shortcut for sigma field
 \newcommand{\op}[3]{#1_{\substack{#2}}^{\substack{#3}}} % shortcut for operators
-\newcommand{\trans}{\intercal} % transpose T
+\newcommand{\transpose}{\intercal} % transpose T
 \newcommand{\vect}[1]{\underaccent{\bar}{#1}} % vector shown as undebar
+\newcommand{\indep}{\perp \!\!\! \perp} % independence symbol between r.v.s
+\newcommand{\eqdist}{\overset{d}{=}} % denotes two r.v. are equal in distn
+\DeclareMathOperator{\ExpOp}{\mathbb{E}} % Expected Value E symbol
+\DeclarePairedDelimiterX{\ExpArg}[1]{[}{]}{#1} % arguments of expected value operator
+\newcommand{\E}{\ExpOp\ExpArg*} % expected value operator --> use "\E{}"
 
 % mess around with spacing stuff + titles
 \setlength\parskip{10pt} % set space between paragraphs

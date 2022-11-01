@@ -19,6 +19,7 @@ endnote: no
 # keywords: "pandoc, r markdown, knitr"
 #thanks: "Note: I have taken materials here from a combination of my own STAT 901 notes, notes I receieved from Yi Shen when I missed a class, and the Rosenthal book  on probability theory \\citep{rosenthalprob}."
 # header-includes:
+#  - \usepackage{pkg}
 ---
 
 ```{r setup, include=FALSE}
@@ -30,4 +31,28 @@ knitr::opts_chunk$set(cache=TRUE,
                       x2 = sub('-\\d+([.][a-z]+)$', '\\1', x)
                       if (file.rename(x, x2)) x2 else x
                       })
+#setwd("P:\\__Coursework__\\F22\\STAT842 - Data Visualisation\\Assignments\\A2")
+```
+
+```{r header}
+# packages #####################################################################
+  # always-use packages
+  pkglist = c("tidyverse")
+  # graphing/tabulations/colour palettes/etc.
+  #pkglist = c("broom","wesanderson","printr","shadowtext","huxtable","kableExtra")
+################################################################################
+if (!require("pacman")) {
+  install.packages("pacman")
+}
+pacman::p_load(char=pkglist)
+rm(pkglist)
+
+# handy not-in operator
+`%notin%` <- Negate(`%in%`)
+
+# avoids clash of select functions between dplyr and MASS
+select <- dplyr::select
+
+# function to return most common string->handy in dplyr summarise
+most.common = function(vec) return(names(which.max(table(vec))))
 ```
