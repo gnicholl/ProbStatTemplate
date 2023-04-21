@@ -5,6 +5,9 @@ output:
     citation_package: natbib
 bibliography: master.bib
 biblio-style: apsr
+link-citations: yes
+linkcolor: blue
+urlcolor: blue
 title: "STAT xxx Assignment y"
 author:
 - name: Gradon Nicholls
@@ -18,8 +21,8 @@ endnote: no
 # abstract: "This document is about..."
 # keywords: "pandoc, r markdown, knitr"
 #thanks: "Note: I have taken materials here from a combination of my own STAT 901 notes, notes I receieved from Yi Shen when I missed a class, and the Rosenthal book  on probability theory \\citep{rosenthalprob}."
-# header-includes:
-#  - \usepackage{pkg}
+header-includes:
+  - \usepackage{hyperref} # should be last package loaded! (if you want nice blue hyperlink citations)
 ---
 
 ```{r setup, include=FALSE}
