@@ -1,4 +1,4 @@
-name: MyFirstTemplate
+name: probstattemplate
 description: >
    Modification of stevetemplates which modifies formatting, adds shortcuts for math in latex, and adds a header R chunk with some handy commonly-used R packages and code.
 create_dir: FALSE
