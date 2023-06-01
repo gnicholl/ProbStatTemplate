@@ -1,0 +1,185 @@
+---
+output: 
+  ProbStatTemplate::probstattemplate:
+    fig_caption: true
+    citation_package: natbib
+bibliography: master.bib
+biblio-style: apsr
+link-citations: yes
+linkcolor: blue
+urlcolor: blue
+title: "An Interesting Title"
+author:
+- name: Gradon Nicholls
+  affiliation: PhD Student, University of Waterloo
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+geometry: margin=1in
+fontfamily: mathpazo
+fontsize: 11pt
+endnote: no
+# abstract: "This document is about..."
+# keywords: "pandoc, r markdown, knitr"
+# thanks: "Here is a footnote with thanks, disclaimer, citation, etc. \\citep{rosenthalprob}."
+header-includes:
+  - \usepackage{hyperref} # should be last package loaded! (if you want nice blue hyperlink citations)
+---
+
+```{r options, include=FALSE}
+# knitr options
+knitr::opts_chunk$set(cache=TRUE,
+                      message=FALSE, warning=FALSE,
+                      fig.path='figs/',
+                      cache.path = '_cache/',
+                      fig.process = function(x) {
+                      x2 = sub('-\\d+([.][a-z]+)$', '\\1', x)
+                      if (file.rename(x, x2)) x2 else x
+                      })
+
+# turn on for fast (c++) versions of functions
+options(fastfunc=TRUE)
+
+# turn on for parallel versions of functions
+options(parallelize=FALSE)
+
+# set working directory
+#setwd("P:\\__Coursework__\\F22\\STAT842 - Data Visualisation\\Assignments\\A2")
+```
+
+```{r packages, include=FALSE}
+# choose packages to load
+  # always-use packages
+  pkgs = c("tidyverse")
+  
+  # data management
+  pkgs = c(pkgs,"labelled","data.table")
+  
+  # latex, tables
+  pkgs = c(pkgs,"knitr","kableExtra","gtsummary","broom","huxtable")
+  
+  # HPC/speed
+  pkgs = c(pkgs,"bench","parallel","Rcpp","RcppArmadillo","dqrng","Rfast","Rfast2","pbapply")
+  
+  # statistical packages
+  pkgs = c(pkgs, "MASS")
+
+# install (if needed) and load packages with pacman
+  if (!require("pacman")) install.packages("pacman")
+  pacman::p_load(char=pkgs)
+  rm(pkgs)
+```
+
+```{r help_misc, include=FALSE}
+# handy not-in operator
+`%notin%` <- Negate(`%in%`)
+
+# avoids clash of select functions between dplyr and MASS
+select <- dplyr::select
+
+# function to return most common string->handy in dplyr summarise
+most.common = function(vec) return(names(which.max(table(vec))))
+```
+
+```{r help_fastfunc, eval=getOption("fastfunc"), include=FALSE}
+# fast versions of RNG functions (uses separate seed!)
+if (require(dqrng)) {
+  .set.seed = function(a,b=a+1) {
+    base::set.seed(a)
+    dqrng::dqset.seed(b)
+  }
+  .runif = dqrng::dqrunif
+  .rnorm = dqrng::dqrnorm
+  .rexp = dqrng::dqrexp
+  .sample = dqrng::dqsample
+} else {
+  .set.seed = base::set.seed
+  .runif = base::runif
+  .rnorm = base::rnorm
+  .rexp = base::rexp
+  .sample = base::sample
+}
+```
+
+```{r help_parallelize, eval=getOption("parallelize"), include=FALSE}
+# set number of cores to K-1 where K is number of cores detected
+if(require(parallel)) cl = makeCluster(detectCores() - 1)
+if (require(pbapply)) {
+  pboptions(use_lb=TRUE,nout=10)
+  .apply = pbapply::pbapply
+  .lapply = pbapply::pblapply
+  .sapply = pbapply::pbsapply
+} else {
+  .apply = base::apply
+  .lapply = base::lapply
+  .sapply = base::sapply
+}
+```
+
+
+# An example
+
+Set the seed(s):
+
+```{r chunk1}
+.set.seed(20230128)
+```
+
+## Logistic Regression Table with gtsummary
+
+```{r chunk2}
+# read and clean data
+data(iris)
+iris2 = iris %>%
+  mutate(Species = as.numeric(Species=="setosa"))
+
+# model 1
+model1 = glm(Species ~ Petal.Length + Petal.Width,
+            family=binomial(link="logit"),
+            data=iris2)
+
+# model 2
+model2 = glm(Species ~ Sepal.Length + Sepal.Width,
+            family=binomial(link="logit"),
+            data=iris2)
+
+# the table
+tbl1 = tbl_regression(model1,exponentiate = TRUE) %>%
+  add_global_p(keep=TRUE) %>%
+  add_n(location="level")
+tbl2 = tbl_regression(model2,exponentiate = TRUE) %>%
+  add_global_p(keep=TRUE) %>%
+  add_n(location="level")
+tbl_combine = tbl_merge(tbls=list(tbl1,tbl2),
+                        tab_spanner=c("Model 1", "Model 2")) %>%
+  bold_labels()
+as_kable_extra(tbl_combine,format="latex",booktabs=T,label="notwell",
+               caption="Factors associated with Pr(not well): odds ratios") %>%
+  kable_styling(position="center") %>%
+  add_footnote("Some notes about this regression.",threeparttable = TRUE)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r eof_parallelize, eval=getOption("parallelize"), include=FALSE}
+# Run this code chunk last (or once you are done with parallelized code)
+if(require(parallel)) stopCluster(cl)
+```
+
+
+
+
+
+
+
+
