@@ -125,21 +125,29 @@ Set the seed(s):
 
 ## Logistic Regression Table with gtsummary
 
+See Table \ref{tab:crime}
+
 ```{r chunk2}
 # read and clean data
-data(iris)
-iris2 = iris %>%
-  mutate(Species = as.numeric(Species=="setosa"))
+data(Boston)
+Boston2 = Boston %>%
+  mutate(y = as.numeric(crim>1)) %>%
+  mutate(chas = factor(chas))
+levels(Boston2$chas) = c("No", "Yes")
+var_label(Boston2) = list(
+  age = "Prop. units built bef. 1940",
+  chas = "Tract at Charles River?"
+)
 
 # model 1
-model1 = glm(Species ~ Petal.Length + Petal.Width,
+model1 = glm(y ~ age + chas,
             family=binomial(link="logit"),
-            data=iris2)
+            data=Boston2)
 
 # model 2
-model2 = glm(Species ~ Sepal.Length + Sepal.Width,
+model2 = glm(y ~ age + chas,
             family=binomial(link="logit"),
-            data=iris2)
+            data=Boston2)
 
 # the table
 tbl1 = tbl_regression(model1,exponentiate = TRUE) %>%
@@ -148,13 +156,14 @@ tbl1 = tbl_regression(model1,exponentiate = TRUE) %>%
 tbl2 = tbl_regression(model2,exponentiate = TRUE) %>%
   add_global_p(keep=TRUE) %>%
   add_n(location="level")
-tbl_combine = tbl_merge(tbls=list(tbl1,tbl2),
-                        tab_spanner=c("Model 1", "Model 2")) %>%
+tbl_combine = 
+  tbl_merge(tbls=list(tbl1,tbl2),
+            tab_spanner=c("Model 1", "Model 2")) %>%
   bold_labels()
-as_kable_extra(tbl_combine,format="latex",booktabs=T,label="notwell",
-               caption="Factors associated with Pr(not well): odds ratios") %>%
+as_kable_extra(tbl_combine,format="latex",booktabs=T,label="crime",
+               caption="Factors associated with high crime: odds ratios") %>%
   kable_styling(position="center") %>%
-  add_footnote("Some notes about this regression.",threeparttable = TRUE)
+  kableExtra::add_footnote("Some notes about this regression.",threeparttable = TRUE)
 ```
 
 
