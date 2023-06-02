@@ -1,54 +1,56 @@
-% ARTICLE ----
-% This is just here so I know exactly what I'm looking at in Rstudio when messing with stuff.
+% list of packages used below
+% - geometry
+% - specified font family OR lmodern by default
+% - fontenc
+% - inputenc
+% - abstract
+
+
+% basic setup
 \documentclass[$if(fontsize)$$fontsize$,$endif$$if(lang)$$babel-lang$,$endif$$if(papersize)$$papersize$,$endif$$for(classoption)$$classoption$$sep$,$endfor$]{article}
 \usepackage[left=1in,top=1in,right=1in,bottom=1in]{geometry}
+
+% font/text stuff
 \newcommand*{\authorfont}{\fontfamily{phv}\selectfont}
 $if(fontfamily)$
 \usepackage[$fontfamilyoptions$]{$fontfamily$}
 $else$
 \usepackage{lmodern}
 $endif$
+\usepackage[$if(fontenc)$$fontenc$$else$T1$endif$]{fontenc}
+\usepackage[utf8]{inputenc}
+
+% title page stuff
+  % abstract
+  \usepackage{abstract}
+  \renewcommand{\abstractname}{}    % clear the title
+  \renewcommand{\absnamepos}{empty} % originally center
+  \renewenvironment{abstract}
+   {{%
+      \setlength{\leftmargin}{0mm}
+      \setlength{\rightmargin}{\leftmargin}%
+    }%
+    \relax}
+   {\endlist}
+
+  % title+footnote
+  \makeatletter
+  \def\@maketitle{%
+    \newpage
+    \let \footnote \thanks
+      {\fontsize{18}{20}\selectfont\raggedright  \setlength{\parindent}{0pt} \@title \par}%
+  }
+  \makeatother
 
 
-  \usepackage[$if(fontenc)$$fontenc$$else$T1$endif$]{fontenc}
-  \usepackage[utf8]{inputenc}
-
-
-
-
-\usepackage{abstract}
-\renewcommand{\abstractname}{}    % clear the title
-\renewcommand{\absnamepos}{empty} % originally center
-
-\renewenvironment{abstract}
- {{%
-    \setlength{\leftmargin}{0mm}
-    \setlength{\rightmargin}{\leftmargin}%
-  }%
-  \relax}
- {\endlist}
-
-\makeatletter
-\def\@maketitle{%
-  \newpage
-%  \null
-%  \vskip 2em%
-%  \begin{center}%
-  \let \footnote \thanks
-    {\fontsize{18}{20}\selectfont\raggedright  \setlength{\parindent}{0pt} \@title \par}%
-}
-%\fi
-\makeatother
-
-
+% appendix numbering for tables/figures
 $if(appendix)$
 \renewcommand*\thetable{$appendixletter$.\arabic{table}}
 \renewcommand*\thefigure{$appendixletter$.\arabic{figure}}
 $endif$
 
 
-\setcounter{secnumdepth}{0}
-
+% code blocks / verbatim text
 $if(listings)$
 \usepackage{listings}
 $endif$
@@ -61,10 +63,11 @@ $endif$
 $if(verbatim-in-note)$
 \usepackage{fancyvrb}
 $endif$
+
+% tables/graphics
 $if(tables)$
 \usepackage{longtable,booktabs}
 $endif$
-
 $if(graphics)$
 \usepackage{graphicx,grffile}
 \makeatletter
@@ -77,33 +80,42 @@ $if(graphics)$
 \setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
 $endif$
 
-
+% more title page stuff
 $if(title)$
 \title{$title$$if(subtitle)$: $subtitle$$endif$ $if(anonymous)$$else$$if(thanks)$\thanks{$thanks$} $endif$$endif$ }
 $endif$
 
-
-
 $if(anonymous)$$else$\author{$for(author)$\Large $author.name$\vspace{0.05in} \newline\normalsize\emph{$author.affiliation$}  $sep$ \and $endfor$}$endif$
-
 
 \date{}
 
-\usepackage{titlesec}
 
+% mess around with spacing stuff + titles
+\usepackage{titlesec}
+\usepackage{enumitem}
 \titleformat*{\section}{\normalsize\bfseries}
 \titleformat*{\subsection}{\normalsize\itshape}
 \titleformat*{\subsubsection}{\normalsize\itshape}
 \titleformat*{\paragraph}{\normalsize\itshape}
 \titleformat*{\subparagraph}{\normalsize\itshape}
+\setlength\parskip{10pt} % set space between paragraphs
+\setlength\parindent{0pt} % set indent of first paragraph first line
+\setlist[itemize]{topsep=0pt} % set space btw paragraph and list
+\setlist[enumerate]{topsep=0pt} % set space btw paragraph and list
+\setcounter{secnumdepth}{3} % allow for section numbering up to n depth
+\titleformat{\section}[block]{\large\bfseries}{\thesection}{1em}{} % template uses titlesec pkg
+\titleformat{\subsection}[hang]{\normalsize\bfseries}{\thesubsection}{1em}{}
+\titlespacing{\section}{0pt}{0pt}{3pt} % spacing left/before/after section headings
+\titlespacing{\subsection}{0pt}{0pt}{3pt}
+\titlespacing{\subsubsection}{0pt}{0pt}{3pt}
 
 
+% bibliography stuff
 $if(natbib)$
 \usepackage{natbib}
 \bibliographystyle{$if(biblio-style)$$biblio-style$$else$plainnat$endif$}
 \usepackage[strings]{underscore} % protect underscores in most circumstances
 $endif$
-
 $if(biblatex)$
 \usepackage$if(biblio-style)$[style=$biblio-style$]$endif${biblatex}
 $if(biblatexoptions)$\ExecuteBibliographyOptions{$for(biblatexoptions)$$biblatexoptions$$sep$,$endfor$}$endif$
@@ -111,12 +123,10 @@ $for(bibliography)$
 \addbibresource{$bibliography$}
 $endfor$
 $endif$
-$if(listings)$
-\usepackage{listings}
-$endif$
 
 
-\newtheorem{hypothesis}{Hypothesis}
+
+
 \usepackage{setspace}
 
 
@@ -125,94 +135,17 @@ $endif$
 \def\fps@figure{htbp}
 \makeatother
 
-$for(header-includes)$
-$header-includes$
-$endfor$
+% mess around with captions
+\usepackage[width=0.9\textwidth]{caption}
+\usepackage{floatrow}
+\floatsetup[figure]{capposition=top}
+\floatsetup[table]{capposition=top}
 
-% move the hyperref stuff down here, after header-includes, to allow for - \usepackage{hyperref}
-
-\makeatletter
-\@ifpackageloaded{hyperref}{}{%
-\ifxetex
-  \PassOptionsToPackage{hyphens}{url}\usepackage[setpagesize=false, % page size defined by xetex
-              unicode=false, % unicode breaks when used with xetex
-              xetex]{hyperref}
-\else
-  \PassOptionsToPackage{hyphens}{url}\usepackage[draft,unicode=true]{hyperref}
-\fi
-}
-
-\@ifpackageloaded{color}{
-    \PassOptionsToPackage{usenames,dvipsnames}{color}
-}{%
-    \usepackage[usenames,dvipsnames]{color}
-}
-\makeatother
-\hypersetup{breaklinks=true,
-            bookmarks=true,
-            pdfauthor={$if(anonymous)$$else$$for(author)$$author.name$ ($author.affiliation$)$sep$ and $endfor$$endif$},
-             pdfkeywords = {$if(keywords)$$keywords$$endif$},
-            pdftitle={$title$$if(subtitle)$: $subtitle$$endif$},
-            colorlinks=true,
-            citecolor=$if(citecolor)$$citecolor$$else$blue$endif$,
-            urlcolor=$if(urlcolor)$$urlcolor$$else$blue$endif$,
-            linkcolor=$if(linkcolor)$$linkcolor$$else$magenta$endif$,
-            pdfborder={0 0 0}}
-\urlstyle{same}  % don't use monospace font for urls
-
-% Add an option for endnotes. -----
-
-$if(endnotes)$
-\usepackage{endnotes}
-\renewcommand{\enotesize}{\normalsize}
-\let\footnote=\endnote
-$endif$
-
-% add tightlist ----------
-\providecommand{\tightlist}{%
-\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-
-% add some other packages ----------
-
-% \usepackage{multicol}
-% This should regulate where figures float
-% See: https://tex.stackexchange.com/questions/2275/keeping-tables-figures-close-to-where-they-are-mentioned
-\usepackage[section]{placeins}
-
-% CSL environment change -----
-
-$if(csl-refs)$
-\newlength{\cslhangindent}
-\setlength{\cslhangindent}{1.5em}
-\newlength{\csllabelwidth}
-\setlength{\csllabelwidth}{3em}
-\newenvironment{CSLReferences}[2] % #1 hanging-ident, #2 entry spacing
- {% don't indent paragraphs
-  \setlength{\parindent}{0pt}
-  % turn on hanging indent if param 1 is 1
-  \ifodd #1 \everypar{\setlength{\hangindent}{\cslhangindent}}\ignorespaces\fi
-  % set entry spacing
-  \ifnum #2 > 0
-  \setlength{\parskip}{#2\baselineskip}
-  \fi
- }%
- {}
-\usepackage{calc}
-\newcommand{\CSLBlock}[1]{#1\hfill\break}
-\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
-\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
-\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
-$endif$
-$if(csquotes)$
-\usepackage{csquotes}
-$endif$
-
-% a few packages
+% some math packages
 \usepackage{amssymb,amsmath} % HT @ashenkin
 \usepackage{accents} % make sure comes AFTER amsmath
 \usepackage{bm} % bold math characters
 \usepackage{centernot} % add "not" slash to any symbol e.g. \centernot\implies
-\usepackage{enumitem}
 \usepackage{mathtools}
 
 % fancy/different versions of letters
@@ -274,31 +207,104 @@ $endif$
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% mess around with spacing stuff + titles
-\setlength\parskip{10pt} % set space between paragraphs
-\setlength\parindent{0pt} % set indent of first paragraph first line
-\setlist[itemize]{topsep=0pt} % set space btw paragraph and list
-\setlist[enumerate]{topsep=0pt} % set space btw paragraph and list
-\setcounter{secnumdepth}{3} % allow for section numbering up to n depth
-\titleformat{\section}[block]{\large\bfseries}{\thesection}{1em}{} % template uses titlesec pkg
-\titleformat{\subsection}[hang]{\normalsize\bfseries}{\thesubsection}{1em}{}
-\titlespacing{\section}{0pt}{0pt}{3pt} % spacing left/before/after section headings
-\titlespacing{\subsection}{0pt}{0pt}{3pt}
-\titlespacing{\subsubsection}{0pt}{0pt}{3pt}
+
+
+
+% header-includes will end up here
+$for(header-includes)$
+$header-includes$
+$endfor$
+
+
+
+% hyperref options
+\makeatletter
+\@ifpackageloaded{hyperref}{}{%
+\ifxetex
+  \PassOptionsToPackage{hyphens}{url}\usepackage[setpagesize=false, % page size defined by xetex
+              unicode=false, % unicode breaks when used with xetex
+              xetex]{hyperref}
+\else
+  \PassOptionsToPackage{hyphens}{url}\usepackage[draft,unicode=true]{hyperref}
+\fi
+}
+
+\@ifpackageloaded{color}{
+    \PassOptionsToPackage{usenames,dvipsnames}{color}
+}{%
+    \usepackage[usenames,dvipsnames]{color}
+}
+\makeatother
+\hypersetup{breaklinks=true,
+            bookmarks=true,
+            pdfauthor={$if(anonymous)$$else$$for(author)$$author.name$ ($author.affiliation$)$sep$ and $endfor$$endif$},
+             pdfkeywords = {$if(keywords)$$keywords$$endif$},
+            pdftitle={$title$$if(subtitle)$: $subtitle$$endif$},
+            colorlinks=true,
+            citecolor=$if(citecolor)$$citecolor$$else$blue$endif$,
+            urlcolor=$if(urlcolor)$$urlcolor$$else$blue$endif$,
+            linkcolor=$if(linkcolor)$$linkcolor$$else$magenta$endif$,
+            pdfborder={0 0 0}}
+\urlstyle{same}  % don't use monospace font for urls
+
+
+% Add an option for endnotes. -----
+$if(endnotes)$
+\usepackage{endnotes}
+\renewcommand{\enotesize}{\normalsize}
+\let\footnote=\endnote
+$endif$
+
+% add tightlist ----------
+\providecommand{\tightlist}{%
+\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% add some other packages ----------
+
+% \usepackage{multicol}
+% This should regulate where figures float
+% See: https://tex.stackexchange.com/questions/2275/keeping-tables-figures-close-to-where-they-are-mentioned
+\usepackage[section]{placeins}
+
+% CSL environment change -----
+
+$if(csl-refs)$
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-ident, #2 entry spacing
+ {% don't indent paragraphs
+  \setlength{\parindent}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1 \everypar{\setlength{\hangindent}{\cslhangindent}}\ignorespaces\fi
+  % set entry spacing
+  \ifnum #2 > 0
+  \setlength{\parskip}{#2\baselineskip}
+  \fi
+ }%
+ {}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{#1\hfill\break}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+$endif$
+$if(csquotes)$
+\usepackage{csquotes}
+$endif$
+
+
+
+
 
 \begin{document}
-
-% \pagenumbering{arabic}% resets `page` counter to 1
-%$if(appendix)$
-%\renewcommand*{\thepage}{$appendixletter$--\arabic{page}}
-%$endif$
 
 $if(removetitleabstract)$
 $else$
 $if(title)$
-% \maketitle
 
-{% \usefont{T1}{pnc}{m}{n}
+{
 \setlength{\parindent}{0pt}
 \thispagestyle{plain}
 {\fontsize{18}{20}\selectfont\raggedright
@@ -320,8 +326,6 @@ $endif$
 
 
 $if(abstract)$
-
-
 
 \begin{abstract}
 
