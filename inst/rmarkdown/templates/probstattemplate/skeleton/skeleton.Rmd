@@ -3,7 +3,6 @@ output:
   ProbStatTemplate::probstattemplate:
     fig_caption: true
     citation_package: natbib
-bibliography: master.bib
 biblio-style: apsr
 link-citations: yes
 linkcolor: blue
@@ -26,7 +25,7 @@ header-includes:
 
 ```{r options, include=FALSE}
 # knitr options
-knitr::opts_chunk$set(cache=TRUE,
+knitr::opts_chunk$set(cache=TRUE, fig.height=3.5, fig.width=4.5,
                       message=FALSE, warning=FALSE,
                       fig.path='figs/',
                       cache.path = '_cache/',
@@ -34,6 +33,8 @@ knitr::opts_chunk$set(cache=TRUE,
                       x2 = sub('-\\d+([.][a-z]+)$', '\\1', x)
                       if (file.rename(x, x2)) x2 else x
                       })
+knitr::knit_hooks$set(crop = knitr::hook_pdfcrop)
+knitr::opts_chunk$set(crop = TRUE)
 
 # turn on for fast (c++) versions of functions
 options(fastfunc=TRUE)
@@ -55,6 +56,9 @@ options(parallelize=FALSE)
   
   # latex, tables
   pkgs = c(pkgs,"knitr","kableExtra","gtsummary","broom","huxtable")
+  
+  # graphing
+  pkgs = c(pkgs,"ggpubr")
   
   # HPC/speed
   pkgs = c(pkgs,"bench","parallel","Rcpp","RcppArmadillo","dqrng","Rfast","Rfast2","pbapply")
@@ -166,13 +170,39 @@ as_kable_extra(tbl_combine,format="latex",booktabs=T,label="crime",
   kableExtra::add_footnote("Some notes about this regression.",threeparttable = TRUE)
 ```
 
+## Citations
+
+\cite{efron1979bootstrap} is a classic paper introducing the bootstrap method.
 
 
 
+\newpage
 
 
+```{r gencitations , include=FALSE}
+writeLines(text="
+@article{efron1979bootstrap,
+  title={Bootstrap Methods: Another Look at the Jackknife},
+  author={Efron, B},
+  journal={The Annals of Statistics},
+  pages={1--26},
+  year={1979},
+  publisher={JSTOR}
+}
+",
+con="bibliography.bib"
+)
+```
 
+\bibliography{bibliography.bib}
 
+\newpage
+
+\appendix
+\section*{Appendix}
+\renewcommand{\thesubsection}{\Alph{subsection}}
+
+\subsection{An Appendix}
 
 
 
