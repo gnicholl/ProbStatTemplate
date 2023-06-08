@@ -374,6 +374,75 @@ $if(titlefont)$\setbeamerfont{frametitle}{family=\fontspec{$titlefont$}}$else$$e
 \draw (-0.1,0.2) to [out=15,in=-100] (0.4,0.95);
 \end{tikzpicture}}
 
+
+% some math packages
+\usepackage{accents} % make sure comes AFTER amsmath
+\usepackage{bm} % bold math characters
+\usepackage{centernot} % add "not" slash to any symbol e.g. \centernot\implies
+\usepackage{mathtools}
+
+% fancy/different versions of letters
+\newcommand{\A}{\mathcal{A}} % fancy A
+\newcommand{\B}{\mathcal{B}} % fancy B
+\newcommand{\F}{\mathcal{F}} % fancy F
+\newcommand{\G}{\mathcal{G}} % fancy G
+\renewcommand{\L}{\mathcal{L}} % fancy L
+\newcommand{\M}{\mathcal{M}} % fancy M
+\newcommand{\N}{\mathbb{N}} % natural numbers
+\newcommand{\R}{\mathbb{R}} % real numbers
+\newcommand{\Z}{\mathbb{Z}} % integers
+\renewcommand{\epsilon}{\varepsilon} % use fancy epsilon by default
+\newcommand{\eps}{\epsilon} % alias for epsilon
+
+%%% shortcuts for operators/symbols/relations/etc. %%%
+  % operators: probability, expectation, variance, covariance
+  \DeclareMathOperator{\PROp}{\textbf{P}} % Probability function --> use "\PR{}"
+  \DeclarePairedDelimiterX{\PRArg}[1]{(}{)}{#1}
+  \newcommand{\PR}{\PROp\PRArg*}
+
+  \DeclareMathOperator{\EOp}{\mathbb{E}} % Expected Value --> use "\E{}"
+  \DeclarePairedDelimiterX{\EArg}[1]{[}{]}{#1}
+  \newcommand{\E}{\EOp\EArg*}
+
+  \DeclareMathOperator{\VarOp}{Var} % Variance --> use "\Var{}"
+  \DeclarePairedDelimiterX{\VarArg}[1]{(}{)}{#1}
+  \newcommand{\Var}{\VarOp\VarArg*}
+
+  \DeclareMathOperator{\CovOp}{Cov} % Covariance --> use "\Cov{}"
+  \DeclarePairedDelimiterX{\CovArg}[1]{(}{)}{#1}
+  \newcommand{\Cov}{\CovOp\CovArg*}
+
+  \DeclareMathOperator{\CorrOp}{Corr} % Correlation --> use "\Corr{}"
+  \DeclarePairedDelimiterX{\CorrArg}[1]{(}{)}{#1}
+  \newcommand{\Corr}{\CorrOp\CorrArg*}
+
+  % some probability stuff
+  \newcommand{\indfun}{\textbf{1}} % indicator function
+  \newcommand{\indep}{\perp \!\!\! \perp} % independence symbol between r.v.s
+  \newcommand{\eqdist}{\overset{\text{d}}{=}} % denotes two r.v. are equal in distn
+  \newcommand{\chf}{\varphi} % characteristic function
+  \newcommand{\distas}[2]{\sim \text{{#1}} \left({#2}\right)} % random variable distributed as
+  \newcommand{\iidas}[2]{\overset{\text{iid}}{\sim} \text{{#1}} \left({#2}\right)} % iid rv's distributed as
+  \newcommand{\suchthat}{\,\, | \,\,} % --> vertical line for conditioning
+  \newcommand{\pto}{\overset{\text{p}}{\to}} % converge in probability
+  \newcommand{\asto}{\overset{\text{a.s.}}{\to}} % converge almost surely
+  \newcommand{\dto}{\overset{\text{d}}{\to}} % converge in distribution
+  \newcommand{\Lpto}[1]{\overset{\L^{#1}}{\to}} % Lp convergence
+
+  % some mathy stuff
+  \newcommand{\notimply}{\centernot\implies} % does not imply
+  \newcommand{\notimplies}{\notimply} % alias for notimply
+  \let\bforall\forall % forall at beginning of expression
+  \renewcommand{\forall}{\,\,\,\bforall} % forall in middle of expression (added hspace)
+  \newcommand{\transpose}{\intercal} % transpose T
+  \newcommand{\vect}[1]{\underaccent{\bar}{#1}} % vector shown as undebar
+  \newcommand{\floor}[1]{\left\lfloor{#1}\right\rfloor} % floor function
+  \newcommand{\ceil}[1]{\left\lceil{#1}\right\rceil} % celing function
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
 % header includes go last.
 
 $for(header-includes)$

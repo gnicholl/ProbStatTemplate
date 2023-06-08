@@ -1,7 +1,7 @@
 Package: ProbStatTemplate
 Type: Package
 Title: Rmarkdown Template for Writing in Statistics and Probability Theory
-Version: 0.1.3
+Version: 1.5
 Author: Gradon Nicholls
 Maintainer: The package maintainer <gradon.nicholls@gmail.com>
 Description: Modification of Steve's templates with convenience tex commands for use in statistics and probability
