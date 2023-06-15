@@ -1,0 +1,107 @@
+---
+output: 
+  ProbStatTemplate::probstattemplate
+title: "Latex Math Examples"
+geometry: margin=1in
+fontfamily: mathpazo
+fontsize: 11pt
+endnote: no
+---
+
+# (re)defined letters/symbols
+
+````{verbatim}
+$$
+\A, \B, \F, \G, \L, \M, \N, \R, \Z, \epsilon, \eps
+$$
+````
+
+$$
+\A, \B, \F, \G, \L, \M, \N, \R, \Z, \epsilon, \eps
+$$
+
+# scale hat symbol
+
+````{verbatim}
+$$
+\hat{\text{word}}, \scalehat{1}{\text{word}}, \scalehat{2}{\text{word}},
+\scalehat{3}{\text{word}}
+$$
+````
+
+$$
+\hat{\text{word}}, \scalehat{1}{\text{word}}, \scalehat{2}{\text{word}}, \scalehat{3}{\text{word}}
+$$
+
+# probability and expectation operators
+
+````{verbatim}
+$$
+\PR{X = x}, \E{X}, \Var{X}, \Cov{X,Y}, \Corr{X,Y}, \hatVar{\hat\theta}
+$$
+````
+
+$$
+\PR{X = x}, \E{X}, \Var{X}, \Cov{X,Y}, \Corr{X,Y}, \hatVar{\hat\theta}
+$$
+
+## conditionals
+
+````{verbatim}
+$$
+\PR{X \leq x \suchthat Y = y}, \E{X \suchthat Y}
+$$
+````
+
+$$
+\PR{X \leq x \suchthat Y = y}, \E{X \suchthat Y}
+$$
+
+# talking about random variables
+
+````{verbatim}
+$$
+\begin{aligned}
+X \indep Y \\
+X \eqdist Y \\
+Y \distas{N}{\mu,\sigma^2} \\
+Y_i \iidas{N}{\mu,\sigma^2} \\
+Y_i \indepas{N}{\mu_i,\sigma^2} \\
+\bar Y \approxas{N}{\mu,\frac{\sigma^2}{n}} \\
+\bar Y \pto \mu \\
+\bar Y \asto \mu \\
+\bar Y \dto Z \\
+\bar Y \Lpto{2} \mu 
+\end{aligned}
+$$
+````
+  
+$$
+\begin{aligned}
+X \indep Y \\
+X \eqdist Y \\
+Y \distas{N}{\mu,\sigma^2} \\
+Y_i \iidas{N}{\mu,\sigma^2} \\
+Y_i \indepas{N}{\mu_i,\sigma^2} \\
+\bar Y \approxas{N}{\mu,\frac{\sigma^2}{n}} \\
+\bar Y \pto \mu \\
+\bar Y \asto \mu \\
+\bar Y \dto Z \\
+\bar Y \Lpto{2} \mu 
+\end{aligned}
+$$
+  
+# misc math things
+
+````{verbatim}
+$$
+A \notimply B, \floor{x}, \ceil{y}
+$$
+````
+
+$$
+A \notimply B, \floor{x}, \ceil{y}
+$$
+
+
+
