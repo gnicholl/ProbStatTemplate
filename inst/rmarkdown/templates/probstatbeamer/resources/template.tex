@@ -380,6 +380,8 @@ $if(titlefont)$\setbeamerfont{frametitle}{family=\fontspec{$titlefont$}}$else$$e
 \usepackage{bm} % bold math characters
 \usepackage{centernot} % add "not" slash to any symbol e.g. \centernot\implies
 \usepackage{mathtools}
+\usepackage{scalerel}
+\usepackage{xintexpr}
 
 % fancy/different versions of letters
 \newcommand{\A}{\mathcal{A}} % fancy A
@@ -394,6 +396,9 @@ $if(titlefont)$\setbeamerfont{frametitle}{family=\fontspec{$titlefont$}}$else$$e
 \renewcommand{\epsilon}{\varepsilon} % use fancy epsilon by default
 \newcommand{\eps}{\epsilon} % alias for epsilon
 
+% scalable \hat
+\newcommand{\scalehat}[2]{\hstretch{#1}{\hat{\hstretch{\xintieval[7]{1/#1}}{#2}}}}
+
 %%% shortcuts for operators/symbols/relations/etc. %%%
   % operators: probability, expectation, variance, covariance
   \DeclareMathOperator{\PROp}{\textbf{P}} % Probability function --> use "\PR{}"
@@ -407,6 +412,7 @@ $if(titlefont)$\setbeamerfont{frametitle}{family=\fontspec{$titlefont$}}$else$$e
   \DeclareMathOperator{\VarOp}{Var} % Variance --> use "\Var{}"
   \DeclarePairedDelimiterX{\VarArg}[1]{(}{)}{#1}
   \newcommand{\Var}{\VarOp\VarArg*}
+  \newcommand{\hatVar}{\scalehat{2}{\VarOp}\VarArg*}
 
   \DeclareMathOperator{\CovOp}{Cov} % Covariance --> use "\Cov{}"
   \DeclarePairedDelimiterX{\CovArg}[1]{(}{)}{#1}
@@ -423,6 +429,8 @@ $if(titlefont)$\setbeamerfont{frametitle}{family=\fontspec{$titlefont$}}$else$$e
   \newcommand{\chf}{\varphi} % characteristic function
   \newcommand{\distas}[2]{\sim \text{{#1}} \left({#2}\right)} % random variable distributed as
   \newcommand{\iidas}[2]{\overset{\text{iid}}{\sim} \text{{#1}} \left({#2}\right)} % iid rv's distributed as
+  \newcommand{\indepas}[2]{\overset{\text{indep.}}{\sim} \text{{#1}} \left({#2}\right)} % independent rv's distributed as
+  \newcommand{\approxas}[2]{\overset{\cdot}{\sim} \text{{#1}} \left({#2}\right)} % rv's approximately distributed as
   \newcommand{\suchthat}{\,\, | \,\,} % --> vertical line for conditioning
   \newcommand{\pto}{\overset{\text{p}}{\to}} % converge in probability
   \newcommand{\asto}{\overset{\text{a.s.}}{\to}} % converge almost surely

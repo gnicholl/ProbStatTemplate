@@ -16,6 +16,8 @@ geometry: margin=1in
 fontfamily: mathpazo
 fontsize: 11pt
 endnote: no
+capwidth: 0.9 # width of caption text as percent of textwidth
+capposition: top # table and figure caption position (top, TOP, bottom, beside)
 # abstract: "This document is about..."
 # keywords: "pandoc, r markdown, knitr"
 # thanks: "Here is a footnote with thanks, disclaimer, citation, etc. \\citep{rosenthalprob}."
@@ -64,7 +66,7 @@ options(parallelize=FALSE)
   pkgs = c(pkgs,"bench","parallel","Rcpp","RcppArmadillo","dqrng","Rfast","Rfast2","pbapply")
   
   # statistical packages
-  pkgs = c(pkgs, "MASS")
+  pkgs = c(pkgs, "MASS", "survey")
 
 # install (if needed) and load packages with pacman
   if (!require("pacman")) install.packages("pacman")

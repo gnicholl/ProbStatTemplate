@@ -137,10 +137,10 @@ $endif$
 \makeatother
 
 % mess around with captions
-\usepackage[width=0.9\textwidth]{caption}
+\usepackage[width=$if(capwidth)$$capwidth$$else$0.9$endif$\textwidth]{caption}
 \usepackage{floatrow}
-\floatsetup[figure]{capposition=top}
-\floatsetup[table]{capposition=top}
+\floatsetup[figure]{capposition=$if(capposition)$$capposition$$else$top$endif$}
+\floatsetup[table]{capposition=$if(capposition)$$capposition$$else$top$endif$}
 
 % some math packages
 \usepackage{amssymb,amsmath} % HT @ashenkin
@@ -148,6 +148,8 @@ $endif$
 \usepackage{bm} % bold math characters
 \usepackage{centernot} % add "not" slash to any symbol e.g. \centernot\implies
 \usepackage{mathtools}
+\usepackage{scalerel}
+\usepackage{xintexpr}
 
 % fancy/different versions of letters
 \newcommand{\A}{\mathcal{A}} % fancy A
@@ -162,6 +164,9 @@ $endif$
 \renewcommand{\epsilon}{\varepsilon} % use fancy epsilon by default
 \newcommand{\eps}{\epsilon} % alias for epsilon
 
+% scalable \hat
+\newcommand{\scalehat}[2]{\hstretch{#1}{\hat{\hstretch{\xintieval[7]{1/#1}}{#2}}}}
+
 %%% shortcuts for operators/symbols/relations/etc. %%%
   % operators: probability, expectation, variance, covariance
   \DeclareMathOperator{\PROp}{\textbf{P}} % Probability function --> use "\PR{}"
@@ -175,6 +180,7 @@ $endif$
   \DeclareMathOperator{\VarOp}{Var} % Variance --> use "\Var{}"
   \DeclarePairedDelimiterX{\VarArg}[1]{(}{)}{#1}
   \newcommand{\Var}{\VarOp\VarArg*}
+  \newcommand{\hatVar}{\scalehat{2}{\VarOp}\VarArg*}
 
   \DeclareMathOperator{\CovOp}{Cov} % Covariance --> use "\Cov{}"
   \DeclarePairedDelimiterX{\CovArg}[1]{(}{)}{#1}
@@ -191,6 +197,8 @@ $endif$
   \newcommand{\chf}{\varphi} % characteristic function
   \newcommand{\distas}[2]{\sim \text{{#1}} \left({#2}\right)} % random variable distributed as
   \newcommand{\iidas}[2]{\overset{\text{iid}}{\sim} \text{{#1}} \left({#2}\right)} % iid rv's distributed as
+  \newcommand{\indepas}[2]{\overset{\text{indep.}}{\sim} \text{{#1}} \left({#2}\right)} %  % independent rv's distributed as
+  \newcommand{\approxas}[2]{\overset{\cdot}{\sim} \text{{#1}} \left({#2}\right)} % rv's approximately distributed as
   \newcommand{\suchthat}{\,\, | \,\,} % --> vertical line for conditioning
   \newcommand{\pto}{\overset{\text{p}}{\to}} % converge in probability
   \newcommand{\asto}{\overset{\text{a.s.}}{\to}} % converge almost surely
@@ -206,6 +214,7 @@ $endif$
   \newcommand{\vect}[1]{\underaccent{\bar}{#1}} % vector shown as undebar
   \newcommand{\floor}[1]{\left\lfloor{#1}\right\rfloor} % floor function
   \newcommand{\ceil}[1]{\left\lceil{#1}\right\rceil} % celing function
+  \renewcommand{\th}{^\text{th}} % convenience to write, e.g., n^th, i^th, etc.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
