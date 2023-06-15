@@ -1,4 +1,4 @@
-name: probstattemplate
+name: ProbStat Latex Report Template
 description: >
-   Modification of stevetemplates which modifies formatting, adds shortcuts for math in latex, and adds a header R chunk with some handy commonly-used R packages and code.
+   Modification of stevetemplates article template. Adds latex commands for common probability and statistics expressions. Skeleton includes default R chunks for convenience use of helpful Rmarkdown features.
 create_dir: FALSE

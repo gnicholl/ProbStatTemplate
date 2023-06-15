@@ -1,4 +1,4 @@
 name: ProbStat Beamer Template
 description: >
-   Fork of stevetemplates beamer template
+   Modification of stevetemplates beamer template. Adds latex commands for common probability and statistics expressions.
 create_dir: FALSE
