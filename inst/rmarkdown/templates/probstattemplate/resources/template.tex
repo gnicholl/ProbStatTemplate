@@ -1,10 +1,38 @@
-% list of packages used below
+%%%%%%%%%%%%%%% list of packages used below %%%%%%%%%%%%%%%%
+%% Package loaded by deafault unless otherwise mentioned. %%
 % - geometry
-% - specified font family OR lmodern by default
+% - specified font family in yaml OR lmodern by default
 % - fontenc
 % - inputenc
 % - abstract
-
+% - listings (if specified in yaml)
+% - fancyvrb (if specified in yaml)
+% - longtable (if 'tables' specified in yaml)
+% - booktabs (if 'tables' specified in yaml)
+% - graphicx (if 'graphics' specified in yaml)
+% - grffile (if 'graphics' specified in yaml)
+% - titlesec
+% - enumitem
+% - natbib (if specified in yaml)
+% - biblatex (if specified in yaml)
+% - setspace
+% - caption
+% - floatrow
+% - amssymb
+% - amsmath
+% - accents
+% - bm
+% - centernot
+% - mathtools
+% - scalerel
+% - xintexpr
+% - hyperref (if loaded by user)
+% - colors (if loaded by user)
+% - endnotes (if specified in yaml)
+% - placeins
+% - calc
+% - csquotes (if specified in yaml)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % basic setup
 \documentclass[$if(fontsize)$$fontsize$,$endif$$if(lang)$$babel-lang$,$endif$$if(papersize)$$papersize$,$endif$$for(classoption)$$classoption$$sep$,$endfor$]{article}
@@ -42,12 +70,6 @@ $endif$
   }
   \makeatother
 
-
-% appendix numbering for tables/figures
-$if(appendix)$
-\renewcommand*\thetable{$appendixletter$.\arabic{table}}
-\renewcommand*\thefigure{$appendixletter$.\arabic{figure}}
-$endif$
 
 
 % code blocks / verbatim text
