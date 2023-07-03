@@ -11,7 +11,7 @@ link-citations: yes
 linkcolor: blue
 urlcolor: blue
 #toc-title: Summary
-bibliography: bib.bib
+bibliography: bibliography.bib
 biblio-style: apsr
 title: "Bootstrap Methods: Another Look at the Jackknife"
 author: "B. Efron (Annals of Statistics, 1979)"
@@ -19,6 +19,14 @@ institute: Presented by Gradon Nicholls for STAT 900 at University of Waterloo
 fontsize: 10pt
 make149: TRUE
 numbersections: TRUE
+glossary-entries:
+  - label: wlog
+    name: WLOG
+    description: without loss of generality
+glossary-acronyms:
+  - label: wlln
+    short: WLLN
+    long: Weak Law of Large Numbers
 #header-includes:
 #  - \usepackage{adjustbox}
 ---
@@ -37,16 +45,22 @@ knitr::opts_chunk$set(
 ```
 
 
+
 # Pop Songs and Political Science
 
 ### Sheena Easton and Game Theory
 
-Sheena Easton describes the following scenario for her baby:
+\gls{glos:wlog}, Sheena Easton describes the following scenario for her baby: \pause
 
-1. Takes the morning train
-2. Works from nine 'til five
-3. Takes another train home again
-4. Finds Sheena Easton waiting for him
+1. Takes the morning train \pause
+2. Works from nine 'til five \pause
+3. Takes another train home again \pause
+4. Finds Sheena Easton waiting for him 
+
+Check out \cite{efron1979bootstrap}.
+
+\setcounter{page}{\theframenumber}
+
 
 ### A Total Conflict Game Between Sheena Easton and Her Baby
 
@@ -64,9 +78,23 @@ Sheena Easton describes the following scenario for her baby:
 \end{tabular}
 \end{table}
 
-Sheena Easton and her baby are playing a **zero-sum (total conflict) game**.
+\gls{glos:wlog}, by the \gls{wlln}, Sheena Easton and her baby are playing a **zero-sum (total conflict) game**. \gls{wlln} is a powerful theorem.
 
 - Akin to Holmes-Moriarty game (see: von Neumann and Morgenstern)
 - Solution: **mixed strategy**
 
+```{r gencitations , include=FALSE}
+writeLines(text="
+@article{efron1979bootstrap,
+  title={Bootstrap Methods: Another Look at the Jackknife},
+  author={Efron, B},
+  journal={The Annals of Statistics},
+  pages={1--26},
+  year={1979},
+  publisher={JSTOR}
+}
+",
+con="bibliography.bib"
+)
+```
 
