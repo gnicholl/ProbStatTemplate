@@ -44,6 +44,9 @@ options(fastfunc=TRUE)
 # turn on for parallel versions of functions
 options(parallelize=FALSE)
 
+# turn off scientific notation
+options(scipen=999)
+
 # set working directory
 #setwd("P:\\__Coursework__\\F22\\STAT842 - Data Visualisation\\Assignments\\A2")
 ```
@@ -54,7 +57,7 @@ options(parallelize=FALSE)
   pkgs = c("tidyverse")
   
   # data management
-  pkgs = c(pkgs,"labelled","data.table")
+  pkgs = c(pkgs,"labelled","data.table","haven","Matrix")
   
   # latex, tables
   pkgs = c(pkgs,"knitr","kableExtra","gtsummary","broom","huxtable")
@@ -63,11 +66,14 @@ options(parallelize=FALSE)
   pkgs = c(pkgs,"ggpubr")
   
   # HPC/speed
-  pkgs = c(pkgs,"bench","parallel","Rcpp","RcppArmadillo","dqrng","Rfast","Rfast2","pbapply")
+  pkgs = c(pkgs,"bench","parallel","Rcpp","RcppArmadillo","dqrng","Rfast","Rfast2","fastmatch")
   
   # statistical packages
   pkgs = c(pkgs, "MASS", "survey")
 
+  # strings / text / NLP / etc
+  pkgs = c(pkgs, "NLP", "tm")
+  
 # install (if needed) and load packages with pacman
   if (!require("pacman")) install.packages("pacman")
   pacman::p_load(char=pkgs)
@@ -103,21 +109,50 @@ if (require(dqrng)) {
   .rexp = base::rexp
   .sample = base::sample
 }
+
+# fast matching
+if (require(fastmatch)) {
+  `%in%` = `%fin%`
+  `%notin%` = Negate(`%fin%`)
+  match = fastmatch::fmatch
+}
+
+# fast matrix sums
+if (require(Rfast)) {
+  .colSums = function(x,...) {
+    if (is.matrix(x)) {
+      return(Rfast::colsums(x,...))
+    } else {
+      return(Matrix::colSums(x,...))
+    }
+  }
+  .rowSums = function(x,...) {
+    if (is.matrix(x)) {
+      return(Rfast::rowsums(x,...))
+    } else {
+      return(Matrix::rowSums(x,...))
+    }
+  }
+} else {
+  .colSums = Matrix::colSums
+  .rowSums = Matrix::rowSums
+}
 ```
 
 ```{r help_parallelize, eval=getOption("parallelize"), include=FALSE}
-# set number of cores to K-1 where K is number of cores detected
-if(require(parallel)) cl = makeCluster(detectCores() - 1)
-if (require(pbapply)) {
-  pboptions(use_lb=TRUE,nout=10)
-  .apply = pbapply::pbapply
-  .lapply = pbapply::pblapply
-  .sapply = pbapply::pbsapply
+# parallel versions of functions
+if (require(parallel)) {
+  cl = makeCluster(detectCores() - 1)
+  .lapply = function(...,FUN) parallel::parLapply(...,fun=FUN)
+  .sapply = parallel::parSapply
 } else {
-  .apply = base::apply
   .lapply = base::lapply
   .sapply = base::sapply
 }
+
+# remember:
+#  - use clusterExport(cl=cl,varlist=c(...),envir=environment()) to pass objects to each core
+#  - envir=environment() is important in nested functions!!
 ```
 
 
