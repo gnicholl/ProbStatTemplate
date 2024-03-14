@@ -131,6 +131,7 @@ $if(anonymous)$$else$\author{$for(author)$\Large $author.name$\vspace{0.05in} \n
 \titlespacing{\section}{0pt}{0pt}{3pt} % spacing left/before/after section headings
 \titlespacing{\subsection}{0pt}{0pt}{3pt}
 \titlespacing{\subsubsection}{0pt}{0pt}{3pt}
+\interfootnotelinepenalty=10000 % forces footnotes to be on same page
 
 
 % bibliography stuff
@@ -163,6 +164,14 @@ $endif$
 \usepackage{floatrow}
 \floatsetup[figure]{capposition=$if(capposition)$$capposition$$else$top$endif$}
 \floatsetup[table]{capposition=$if(capposition)$$capposition$$else$top$endif$}
+
+% remove whitespace between code chunks and output chunks
+\setlength{\OuterFrameSep}{0pt}
+\usepackage{etoolbox}
+\makeatletter
+\preto{\@verbatim}{\topsep=0pt \partopsep=0pt }
+\makeatother
+%\preto{\@verbatim}{\topsep=-5pt \partopsep=-5pt \parsep=5pt }
 
 % some math packages
 \usepackage{amssymb,amsmath} % HT @ashenkin

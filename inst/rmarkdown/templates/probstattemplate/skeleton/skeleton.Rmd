@@ -3,6 +3,7 @@ output:
   ProbStatTemplate::probstattemplate:
     fig_caption: true
     citation_package: natbib
+    keep_tex: true
 biblio-style: apsr
 link-citations: yes
 linkcolor: blue
@@ -25,30 +26,46 @@ header-includes:
   - \usepackage{hyperref} # should be last package loaded! (if you want nice blue hyperlink citations)
 ---
 
-```{r options, include=FALSE}
+```{r setup, include=FALSE}
 # knitr options
-knitr::opts_chunk$set(cache=TRUE, fig.height=3.5, fig.width=4.5,
-                      message=FALSE, warning=FALSE,
-                      fig.path='figs/',
-                      cache.path = '_cache/',
-                      fig.process = function(x) {
-                      x2 = sub('-\\d+([.][a-z]+)$', '\\1', x)
-                      if (file.rename(x, x2)) x2 else x
-                      })
-knitr::knit_hooks$set(crop = knitr::hook_pdfcrop)
-knitr::opts_chunk$set(crop = TRUE)
+knitr::opts_chunk$set(
+  cache=TRUE, fig.height=3.5, fig.width=4.5,
+  message=FALSE, warning=FALSE,
+  fig.path='figs/', cache.path = '_cache/',
+  fig.process = function(x) {
+    x2 = sub('-\\d+([.][a-z]+)$', '\\1', x)
+    if (file.rename(x, x2)) x2 else x
+  },
+  comment=""
+)
 
-# turn on for fast (c++) versions of functions
-options(fastfunc=TRUE)
+# crop figures
+knitr::knit_hooks$set(
+  crop = knitr::hook_pdfcrop
+)
+knitr::opts_chunk$set(crop=TRUE)
+
+# set working directory
+knitr::opts_knit$set(
+  root.dir = NULL # change to your directory, e.g. "c:/project/report"
+)                 #  (if NULL, defaults to directory of the rmd file)
+
+# format code output
+hook_old = knitr::knit_hooks$get("output")  # save the old hook
+knitr::knit_hooks$set(output = function(x, options) {
+  if (options$results == "asis") hook_old(x,options)
+  else paste0(
+        "\\begin{Verbatim}[frame=single,xleftmargin=5mm,xrightmargin=5mm,vspace=0pt]\n",
+        trimws(x),
+        "\n\\end{Verbatim}"
+       )
+})
 
 # turn on for parallel versions of functions
 options(parallelize=FALSE)
 
 # turn off scientific notation
-options(scipen=999)
-
-# set working directory
-#setwd("P:\\__Coursework__\\F22\\STAT842 - Data Visualisation\\Assignments\\A2")
+#options(scipen=999)
 ```
 
 ```{r packages, include=FALSE}
@@ -69,12 +86,17 @@ options(scipen=999)
   pkgs = c(pkgs,"bench","parallel","Rcpp","RcppArmadillo","dqrng","Rfast","Rfast2","fastmatch")
   
   # statistical packages
-  pkgs = c(pkgs, "MASS", "survey")
+  pkgs = c(pkgs, "MASS", "survey", "mice")
 
   # strings / text / NLP / etc
   pkgs = c(pkgs, "NLP", "tm")
   
-# install (if needed) and load packages with pacman
+  # images
+  pkgs = c(pkgs,
+   "magick" # load image files, edit, convert formats
+  )
+  
+# install pacman (if needed) and use to load packages
   if (!require("pacman")) install.packages("pacman")
   pacman::p_load(char=pkgs)
   rm(pkgs)
@@ -91,7 +113,7 @@ select <- dplyr::select
 most.common = function(vec) return(names(which.max(table(vec))))
 ```
 
-```{r help_fastfunc, eval=getOption("fastfunc"), include=FALSE}
+```{r help_fastfunc, include=FALSE}
 # fast versions of RNG functions (uses separate seed!)
 if (require(dqrng)) {
   .set.seed = function(a,b=a+1) {
@@ -118,7 +140,7 @@ if (require(fastmatch)) {
 }
 
 # fast matrix sums
-if (require(Rfast)) {
+if (require(Rfast) & require(Matrix)) {
   .colSums = function(x,...) {
     if (is.matrix(x)) {
       return(Rfast::colsums(x,...))
@@ -133,9 +155,12 @@ if (require(Rfast)) {
       return(Matrix::rowSums(x,...))
     }
   }
-} else {
+} else if(require(Matrix)) {
   .colSums = Matrix::colSums
   .rowSums = Matrix::rowSums
+} else {
+  .colSums = base::colSums
+  .rowSums = base::rowSums
 }
 ```
 
@@ -164,11 +189,21 @@ Set the seed(s):
 .set.seed(20230128)
 ```
 
-## Logistic Regression Table with gtsummary
+## Basic R Output
+
+Regression output:
+
+```{r chunk2}
+x = rnorm(100)
+y = 3 + 4*x + rnorm(100)
+summary(lm(y ~ x))
+```
+
+## Nicely Formatted Output with gtsummary
 
 See Table \ref{tab:crime}
 
-```{r chunk2}
+```{r chunk3, results='asis', echo=FALSE}
 # read and clean data
 data(Boston)
 Boston2 = Boston %>%
@@ -205,6 +240,14 @@ as_kable_extra(tbl_combine,format="latex",booktabs=T,label="crime",
                caption="Factors associated with high crime: odds ratios") %>%
   kable_styling(position="center") %>%
   kableExtra::add_footnote("Some notes about this regression.",threeparttable = TRUE)
+```
+
+## Figures
+
+Figure \ref{fig:fig1} is a figure with white space cropped.
+
+```{r chunk4, fig.cap="\\label{fig:fig1}A figure."}
+plot(rnorm(100),rnorm(100))
 ```
 
 ## Citations
