@@ -166,7 +166,7 @@ $endif$
 \floatsetup[table]{capposition=$if(capposition)$$capposition$$else$top$endif$}
 
 % remove whitespace between code chunks and output chunks
-\setlength{\OuterFrameSep}{0pt}
+\IfPackageLoadedTF{framed}{\setlength{\OuterFrameSep}{0pt}}{}
 \usepackage{etoolbox}
 \makeatletter
 \preto{\@verbatim}{\topsep=0pt \partopsep=0pt }
