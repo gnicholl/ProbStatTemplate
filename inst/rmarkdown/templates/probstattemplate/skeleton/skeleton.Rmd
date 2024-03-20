@@ -51,9 +51,9 @@ knitr::opts_knit$set(
 )                 #  (if NULL, defaults to directory of the rmd file)
 
 # format code output
-hook_old = knitr::knit_hooks$get("output")  # save the old hook
+.hook_old = knitr::knit_hooks$get("output")  # save the old hook
 knitr::knit_hooks$set(output = function(x, options) {
-  if (options$results == "asis") hook_old(x,options)
+  if (options$results == "asis") .hook_old(x,options)
   else paste0(
         "\\begin{Verbatim}[frame=single,xleftmargin=5mm,xrightmargin=5mm,vspace=0pt]\n",
         trimws(x),
