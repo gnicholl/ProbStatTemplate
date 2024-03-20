@@ -253,6 +253,7 @@ plot(rnorm(100),rnorm(100))
 ## Citations
 
 \cite{efron1979bootstrap} is a classic paper introducing the bootstrap method.
+\cite{vaswani2017attention} is an oft-cited paper introducing transformers.
 
 
 
@@ -260,7 +261,9 @@ plot(rnorm(100),rnorm(100))
 
 
 ```{r gencitations , include=FALSE}
-writeLines(text="
+# add bibtex-style citations here
+writeLines(text=r"(
+  
 @article{efron1979bootstrap,
   title={Bootstrap Methods: Another Look at the Jackknife},
   author={Efron, B},
@@ -269,7 +272,16 @@ writeLines(text="
   year={1979},
   publisher={JSTOR}
 }
-",
+                    
+@article{vaswani2017attention,
+  title={Attention is all you need},
+  author={Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N and Kaiser, {\L}ukasz and Polosukhin, Illia},
+  journal={Advances in neural information processing systems},
+  volume={30},
+  year={2017}
+}
+
+)",
 con="bibliography.bib"
 )
 ```
